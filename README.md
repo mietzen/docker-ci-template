@@ -17,13 +17,53 @@ This will autamtically build and release new debian images with a `cowsay` messa
 
 Cowsay example: [https://github.com/mietzen/debian-cowsay](https://github.com/mietzen/debian-cowsay)
 
-The worklow will build all platform listed in `platforms.json` and push them as multi-arch image. 
+The workflow will build all platform listed in `platforms.json` and push them as multi-arch image.
 
-For the worklfow to run you need to create a GitHub-App to generate tokens, follow:
+## Preparation
+
+### Github Token App
+
+For the workflow to run you need to create a GitHub-App to generate tokens, follow:
 
 [https://github.com/actions/create-github-app-token](https://github.com/actions/create-github-app-token?tab=readme-ov-file#usage)
 
-and add the following secrets as repository secrets in Actions **and** Dependabot:
+If you follow the instructions above you should have your App listed under `Settings -> GitHub Apps`:
 
-- APP_ID
-- APP_PRIVATE_KEY
+![](https://github.com/mietzen/docker-ci-template/blob/313cb3c73a4ce2a43397a3a749bfcc238c967367/github-app.png?raw=true)
+
+### Repository config
+
+You need to activate `auto-merge` under `Settings -> General -> Pull Requests`:
+
+![](https://github.com/mietzen/docker-ci-template/blob/313cb3c73a4ce2a43397a3a749bfcc238c967367/auto-merge.png?raw=true)
+
+and setup the branch protection for `main` under `Settings -> Branch -> Add branch protection rule`, for `Branch name pattern` type in `main`:
+
+Then apply the following settings:
+
+![](https://github.com/mietzen/docker-ci-template/blob/313cb3c73a4ce2a43397a3a749bfcc238c967367/branch-protection.png?raw=true)
+
+**The status check `Check-Build` is only available after the `docker-image.yml` ran at least one time. You can trigger the workflow by simply opening a Pull-Request e.g. to add your `Dockerfile`.**
+
+#### Secrets
+
+You need to add the following secrets as repository secrets in Actions:
+
+- `APP_ID`
+- `APP_PRIVATE_KEY`
+- `DOCKER_HUB_DEPLOY_KEY`
+
+![](https://github.com/mietzen/docker-ci-template/blob/313cb3c73a4ce2a43397a3a749bfcc238c967367/action-secrets.png?raw=true)
+
+**and** to Dependabot:
+
+- `APP_ID`
+- `APP_PRIVATE_KEY`
+
+![](https://github.com/mietzen/docker-ci-template/blob/313cb3c73a4ce2a43397a3a749bfcc238c967367/dependabot-secrets.png?raw=true)
+
+[Optional] Add your DockerHub username under variables:
+
+- `DOCKER_HUB_USERNAME`
+
+![](https://github.com/mietzen/docker-ci-template/blob/313cb3c73a4ce2a43397a3a749bfcc238c967367/actions-vars.png?raw=true)
