@@ -1,4 +1,6 @@
-# Docker repack template
+# Docker CI Template
+
+This template will automatically build, release and push docker images for you as soon as a new base image is available.
 
 Simply place a `Dockerfile` at the root of the repo e.g.:
 
@@ -12,12 +14,21 @@ RUN apt-get update && apt-get install -y \
 RUN echo '/usr/games/fortune | /usr/games/cowsay && echo -e "\n"' >> /etc/bash.bashrc
 ```
 
-Is important **not** to use a `latest`, `stable` or any other tag that is not regulary updated. For debian these are the images with a date inside the tag.
-This will autamtically build and release new debian images with a `cowsay` message of the day under the following name: `{DOCKER_HUB_USERNAME}/{REPO_NAME}:{BASE_IMAGE_TAG}` e.g.: `mietzen/debian-cowsay:bookworm-20240211` (The latest image also gets the `latest` tag)
+Is important **not** to use a tag like `latest`, `stable` or any other tag that is not regular updated. For debian there are for example images with a date inside the tag.
 
-Cowsay example: [https://github.com/mietzen/debian-cowsay](https://github.com/mietzen/debian-cowsay)
+The workflows will automatically build and release a new debian images with a `cowsay` message of the day under the following name: `{DOCKER_HUB_USERNAME}/{REPO_NAME}:{BASE_IMAGE_TAG}` e.g.: `mietzen/debian-cowsay:bookworm-20240211` (The latest image also gets the `latest` tag)
 
-The workflow will build all platform listed in `platforms.json` and push them as multi-arch image.
+**Cowsay Example:** [https://github.com/mietzen/debian-cowsay](https://github.com/mietzen/debian-cowsay)
+
+The workflow will build all platform listed in [`platforms.json`](.github/platforms.json) and also push them as a multi-arch image.
+
+## Usage
+
+Click on `Use this template`:
+
+![](https://github.com/mietzen/docker-ci-template/blob/8cf107cd387f7301ac6625cf324416965b362974/use-template.png?raw=true)
+
+And follow the preparation steps.
 
 ## Preparation
 
