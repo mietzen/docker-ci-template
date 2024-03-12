@@ -73,8 +73,9 @@ You need to add the following secrets as repository secrets in Actions:
 
 ![](https://github.com/mietzen/docker-ci-template/blob/313cb3c73a4ce2a43397a3a749bfcc238c967367/dependabot-secrets.png?raw=true)
 
-[Optional] Add your DockerHub username under variables:
+[Optional] Add your DockerHub username and/or the docker image name under variables:
 
 - `DOCKER_HUB_USERNAME`
+- `IMAGE_NAME`
 
 ![](https://github.com/mietzen/docker-ci-template/blob/313cb3c73a4ce2a43397a3a749bfcc238c967367/actions-vars.png?raw=true)
