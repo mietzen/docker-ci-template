@@ -11,6 +11,7 @@ jobs:
     outputs:
       build_matrix: ${{ steps.set-matrix.outputs.build_matrix }}
       version: ${{ steps.set-matrix.outputs.version }}
+      repo_name_lower_case: ${{ steps.set-matrix.outputs.repo_name_lower_case }}
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -21,13 +22,14 @@ jobs:
       run: |
         echo "build_matrix=$(cat .github/platforms.json)" >> $GITHUB_OUTPUT
         echo "version=$(grep FROM ./Dockerfile | head -n1 | cut -d':' -f2 | cut -d' ' -f1 | xargs)" >> $GITHUB_OUTPUT
-
+        echo "repo_name_lower_case=$(echo ${GITHUB_REPOSITORY@L} | cut -d'/' -f2)" >> $GITHUB_OUTPUT
 
   Build:
     runs-on: ubuntu-latest
     needs: Setup
     env:
       VERSION: ${{ needs.Setup.outputs.version }}
+      IMAGE_NAME: ${{ vars.IMAGE_NAME || needs.Setup.outputs.repo_name_lower_case }}
     strategy:
       fail-fast: false
       matrix:
@@ -47,7 +49,6 @@ jobs:
         DOCKER_USER: ${{ vars.DOCKER_HUB_USERNAME || github.repository_owner }}
         BUILD_NR: ${{ github.run_number }}
         PLATFORM: ${{ matrix.platforms }}
-        IMAGE_NAME: ${{ github.event.repository.name }}
       run: |
         ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
         echo ""
@@ -74,7 +75,6 @@ jobs:
         DOCKER_USER: ${{ vars.DOCKER_HUB_USERNAME || github.repository_owner }}
         BUILD_NR: ${{ github.run_number }}
         PLATFORM: ${{ matrix.platforms }}
-        IMAGE_NAME: ${{ github.event.repository.name }}
       run: |
         ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
         echo ""
@@ -108,7 +108,6 @@ jobs:
       env:
         DOCKER_USER: ${{ vars.DOCKER_HUB_USERNAME || github.repository_owner }}
         BUILD_NR: ${{ github.run_number }}
-        IMAGE_NAME: ${{ github.event.repository.name }}
       run: |
         echo ""
         echo "============================================================="
