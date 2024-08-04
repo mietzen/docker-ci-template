@@ -26,7 +26,6 @@ jobs:
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Create Release
         if: steps.pr.outputs.pull-request-operation == 'created'
-        working-directory: juliamono-nerd-font
         run: gh release create ${{ steps.get-version.outputs.version }} --generate-notes
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
