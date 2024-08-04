@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Setup Matrix-Jobs
+      - name: Get Version
         id: get-version
         run: |
           echo "version=$(grep FROM ./Dockerfile | head -n1 | cut -d':' -f2 | cut -d' ' -f1 | xargs)" >> $GITHUB_OUTPUT
@@ -24,8 +24,9 @@ jobs:
         with:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
-      - uses: "softprops/action-gh-release@v2"
-        with:
-          token: ${{ steps.generate-token.outputs.token }}
-          tag_name: ${{ steps.get-version.outputs.version }}
-          generate_release_notes: true
+      - name: Create Release
+        if: steps.pr.outputs.pull-request-operation == 'created'
+        working-directory: juliamono-nerd-font
+        run: gh release create ${{ steps.get-version.outputs.version }} --generate-notes
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
